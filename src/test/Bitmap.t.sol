@@ -8,17 +8,22 @@ import "forge-std/Vm.sol";
 import "../Bitmap.sol";
 
 interface CheatCodes {
-  function prank(address) external;
-  function expectRevert(bytes4) external;
-  function expectRevert(bytes memory) external;
+    function prank(address) external;
+    function expectRevert(bytes4) external;
+    function expectRevert(bytes memory) external;
 }
 
-contract ContractTest is IERC721Receiver, DSTest {
+contract ContractTest is IERC721Receiver, DSTest, Test {
     CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
 
     Bitmap bitmap;
 
-    function onERC721Received(address, address, uint256, bytes memory) public virtual override returns(bytes4) {
+    function onERC721Received(address, address, uint256, bytes memory)
+        public
+        virtual
+        override
+        returns (bytes4)
+    {
         return this.onERC721Received.selector;
     }
 
@@ -26,7 +31,11 @@ contract ContractTest is IERC721Receiver, DSTest {
         bitmap = new Bitmap();
     }
 
-    function stringToBytes32(string memory source) public pure returns (bytes32 result) {
+    function stringToBytes32(string memory source)
+        public
+        pure
+        returns (bytes32 result)
+    {
         bytes memory tempEmptyStringTest = bytes(source);
         if (tempEmptyStringTest.length == 0) {
             return 0x0;
@@ -38,40 +47,40 @@ contract ContractTest is IERC721Receiver, DSTest {
     }
 
     function testMint() public {
-        bytes32 bit = stringToBytes32('000000000000000000000000000000000000000000000000000000000000000');
+        bytes32 bit = stringToBytes32(
+            "000000000000000000000000000000000000000000000000000000000000000"
+        );
         assertEq(bitmap.balanceOf(address(this)), 0);
         bitmap.mint(bit);
         assertEq(bitmap.balanceOf(address(this)), 1);
     }
 
     function testTokenURI() public {
-
-        bytes32 bit = stringToBytes32('000000000000000000000000000000000000000000000000000000000000000');
+        bytes32 bit = stringToBytes32(
+            "000000000000000000000000000000000000000000000000000000000000000"
+        );
         bitmap.mint(bit);
         string memory uri = bitmap.tokenURI(0);
         assertEq(uri, "/0");
     }
 
-
     function testWithdraw() public {
-        uint valueToSend = 200;
-        bytes32 bit = stringToBytes32('000000000000000000000000000000000000000000000000000000000000000');
-        bitmap.mint{value: valueToSend}(bit);
+        uint256 amount = 100 ether;
+        deal(address(bitmap), amount);
 
-        assertEq(address(bitmap).balance, valueToSend);
-
-        uint balanceBefore = address(this).balance;
+        uint256 balanceBefore = address(this).balance;
         bitmap.withdraw();
-        uint balanceAfter = address(this).balance;
+        uint256 balanceAfter = address(this).balance;
 
-        assertEq(balanceAfter - balanceBefore, valueToSend);
+        assertEq(balanceAfter - balanceBefore, amount);
     }
 
-
- function testWithdrawNotOwner() public {
+    function testWithdrawNotOwner() public {
         cheats.expectRevert(bytes("Ownable: caller is not the owner"));
         cheats.prank(address(1));
         bitmap.withdraw();
     }
 
+    fallback() external payable {}
+    receive() external payable {}
 }
