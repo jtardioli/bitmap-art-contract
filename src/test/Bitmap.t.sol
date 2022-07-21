@@ -3,7 +3,8 @@ pragma solidity 0.8.10;
 
 import "ds-test/test.sol";
 import "openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol";
-
+import "forge-std/Test.sol";
+import "forge-std/Vm.sol";
 import "../Bitmap.sol";
 
 interface CheatCodes {
@@ -52,19 +53,19 @@ contract ContractTest is IERC721Receiver, DSTest {
     }
 
 
-    // function testWithdraw() public {
-    //     uint valueToSend = 200;
-    //     bytes32 bit = stringToBytes32('000000000000000000000000000000000000000000000000000000000000000');
-    //     bitmap.mint{value: valueToSend}(bit);
+    function testWithdraw() public {
+        uint valueToSend = 200;
+        bytes32 bit = stringToBytes32('000000000000000000000000000000000000000000000000000000000000000');
+        bitmap.mint{value: valueToSend}(bit);
 
-    //     assertEq(address(bitmap).balance, valueToSend);
+        assertEq(address(bitmap).balance, valueToSend);
 
-    //     uint balanceBefore = address(this).balance;
-    //     bitmap.withdraw();
-    //     uint balanceAfter = address(this).balance;
+        uint balanceBefore = address(this).balance;
+        bitmap.withdraw();
+        uint balanceAfter = address(this).balance;
 
-    //     assertEq(balanceAfter - balanceBefore, valueToSend);
-    // }
+        assertEq(balanceAfter - balanceBefore, valueToSend);
+    }
 
 
  function testWithdrawNotOwner() public {
