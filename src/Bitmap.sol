@@ -8,7 +8,7 @@ import "openzeppelin-contracts/contracts/access/Ownable.sol";
 error FailedTransfer();
 
 contract Bitmap is ERC721A, BitPackedMap, Ownable {
-    string public baseURI = "/";
+    string public baseURI;
 
     constructor() ERC721A("Poop", "Poop") {}
 
