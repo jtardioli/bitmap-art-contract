@@ -1,1 +1,1 @@
-# buttmap-contract
+# Bitmap Art Contract
