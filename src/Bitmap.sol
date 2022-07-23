@@ -15,6 +15,8 @@ contract Bitmap is ERC721A, BitPackedMap, Ownable {
         _safeMint(msg.sender, 1);
     }
 
+    string baseURI = '/';
+
     function _baseURI()
         internal
         view
@@ -22,7 +24,13 @@ contract Bitmap is ERC721A, BitPackedMap, Ownable {
         override
         returns (string memory)
     {
-        return "/"; //todo make not empty
+        return baseURI; //todo make not empty
+    }
+
+    function updateBaseURI(string memory _newBaseURI)
+       external onlyOwner
+    {
+        baseURI = _newBaseURI;
     }
 
     // incase somebody send us free money
