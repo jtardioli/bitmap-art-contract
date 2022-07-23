@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.10;
 
-import "ds-test/test.sol";
+
 import "openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol";
 import "forge-std/Test.sol";
 import "forge-std/Vm.sol";
@@ -13,7 +13,7 @@ interface CheatCodes {
     function expectRevert(bytes memory) external;
 }
 
-contract ContractTest is IERC721Receiver, DSTest, Test {
+contract ContractTest is IERC721Receiver, Test {
     CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
 
     Bitmap bitmap;
@@ -31,35 +31,15 @@ contract ContractTest is IERC721Receiver, DSTest, Test {
         bitmap = new Bitmap();
     }
 
-    function stringToBytes32(string memory source)
-        public
-        pure
-        returns (bytes32 result)
-    {
-        bytes memory tempEmptyStringTest = bytes(source);
-        if (tempEmptyStringTest.length == 0) {
-            return 0x0;
-        }
-
-        assembly {
-            result := mload(add(source, 32))
-        }
-    }
 
     function testMint() public {
-        bytes32 bit = stringToBytes32(
-            "000000000000000000000000000000000000000000000000000000000000000"
-        );
         assertEq(bitmap.balanceOf(address(this)), 0);
-        bitmap.mint(bit);
+        bitmap.mint(0x00);
         assertEq(bitmap.balanceOf(address(this)), 1);
     }
 
     function testTokenURI() public {
-        bytes32 bit = stringToBytes32(
-            "000000000000000000000000000000000000000000000000000000000000000"
-        );
-        bitmap.mint(bit);
+        bitmap.mint(0x00);
         string memory uri = bitmap.tokenURI(0);
         assertEq(uri, "/0");
     }
