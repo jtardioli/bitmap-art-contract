@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.10;
 
-
 import "openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol";
 import "forge-std/Test.sol";
 import "forge-std/Vm.sol";
@@ -31,7 +30,6 @@ contract ContractTest is IERC721Receiver, Test {
         bitmap = new Bitmap();
     }
 
-
     function testMint() public {
         assertEq(bitmap.balanceOf(address(this)), 0);
         bitmap.mint(0x00);
@@ -59,6 +57,17 @@ contract ContractTest is IERC721Receiver, Test {
         cheats.expectRevert(bytes("Ownable: caller is not the owner"));
         cheats.prank(address(1));
         bitmap.withdraw();
+    }
+
+    function testUpdateBaseURI() public {
+        bitmap.updateBaseURI("/yooo/");
+        assertEq("/yooo/", bitmap.baseURI());
+    }
+
+    function testupdateBaseURINotOwner() public {
+        cheats.expectRevert(bytes("Ownable: caller is not the owner"));
+        cheats.prank(address(1));
+        bitmap.updateBaseURI("/yo/");
     }
 
     fallback() external payable {}

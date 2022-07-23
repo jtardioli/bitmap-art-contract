@@ -8,17 +8,14 @@ import "openzeppelin-contracts/contracts/access/Ownable.sol";
 error FailedTransfer();
 
 contract Bitmap is ERC721A, BitPackedMap, Ownable {
-    string baseURI ;
-    constructor() ERC721A("Poop", "Poop") {
-        baseURI = '/';
-    }
+    string public baseURI = "/";
+
+    constructor() ERC721A("Poop", "Poop") {}
 
     function mint(bytes32 _bitmapHex) external payable {
         bitmaps[_currentIndex] = _bitmapHex;
         _safeMint(msg.sender, 1);
     }
-
-
 
     function _baseURI()
         internal
@@ -30,9 +27,7 @@ contract Bitmap is ERC721A, BitPackedMap, Ownable {
         return baseURI; //todo make not empty
     }
 
-    function updateBaseURI(string memory _newBaseURI)
-       external onlyOwner
-    {
+    function updateBaseURI(string memory _newBaseURI) external onlyOwner {
         baseURI = _newBaseURI;
     }
 
