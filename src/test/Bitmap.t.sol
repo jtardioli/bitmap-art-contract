@@ -34,6 +34,7 @@ contract ContractTest is IERC721Receiver, Test {
         assertEq(bitmap.balanceOf(address(this)), 0);
         bitmap.mint(0x00);
         assertEq(bitmap.balanceOf(address(this)), 1);
+        assertEq(bitmap.ownerOf(0), address(this));
     }
 
     function testTokenURI() public {

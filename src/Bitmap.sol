@@ -10,7 +10,7 @@ error FailedTransfer();
 contract Bitmap is ERC721A, BitPackedMap, Ownable {
     string public baseURI;
 
-    constructor() ERC721A("Poop", "Poop") {}
+    constructor() ERC721A("BitmapArt", "BA") {}
 
     function mint(bytes32 _bitmapHex) external payable {
         bitmaps[_currentIndex] = _bitmapHex;
@@ -24,14 +24,13 @@ contract Bitmap is ERC721A, BitPackedMap, Ownable {
         override
         returns (string memory)
     {
-        return baseURI; //todo make not empty
+        return baseURI;
     }
 
     function updateBaseURI(string memory _newBaseURI) external onlyOwner {
         baseURI = _newBaseURI;
     }
 
-    // incase somebody send us free money
     function withdraw() external onlyOwner {
         (bool success,) =
             payable(msg.sender).call{value: address(this).balance}("");
