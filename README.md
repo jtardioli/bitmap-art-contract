@@ -1,7 +1,7 @@
 # Bitmap Art Contract
 
-[Live App](https://bitmap-art.vercel.app/all)
-[Frontend Repo](https://github.com/jtardioli/bitmap-art-frontend)
+- [Live App](https://bitmap-art.vercel.app/all)
+- [Frontend Repo](https://github.com/jtardioli/bitmap-art-frontend)
 
 On-chain 8x8 bitmap svg packed into a single storage slot. Minimalistic frontends allows you to create a bitmap art work which when minted will be displayed in the gallery. Try it out!
 
